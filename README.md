@@ -1,52 +1,60 @@
 # CS6910_Assignment2
 
-## Question 1: a)
-- Filter size is $k$ x $k$ and there are $m$ filters per convolutional layer.
-Each filter has ($d$× $k$ <sup>2</sup>)−1 computations per convolution where d represents depth of input to the convolutional layer.
-- For MaxPooling I'm taking kernel size $2$ x $2$ with stride 2.
-- Input size is $300$ x $300$ with in_channels or depth $d$ =3.
--  **Conv1 layer Computation** : ($m$ x (3 ×  $k$ <sup>2</sup>)−1) x (300 - $k$ +1)<sup>2</sup>
-    Now , after applying maxpooling output will be
-    $${(300 -k +3) \over 2 } \frac {(300 -k +3)}{ 2 }&times; m$$
-
--  **Conv2 layer Computation** : $$m &times; {(m ×  k^2)−1}) &times; \frac{(300 -k +3)}{ 2 }^2 $$
-    Now , after applying maxpooling output will be
-    $${((300 -k +3) / 2  - k +3) \over (2 -k +3)} \times {((300 -k +3) / 2  - k +1) \over (2 -k +3)} \times m $$
-
--  **Conv3 layer Computation** : $$m &times; {(m ×  k^2)−1} &times;{ \bigg ({(300 -k +3) / 2  - k +1) \over 2} -k +1 \bigg )}^2 $$
-    Now , after applying maxpooling output will be
-    $$\bigg ({{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\bigg )\times  \bigg  ({{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\bigg )\times m $$
-    
-
--  **Conv4 layer Computation** : $$m &times; {(m ×  k^2)−1} &times;\bigg ({{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\bigg )^2 $$
-    Now , after applying maxpooling output will be
-    $$\bigg ({{{{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\over 2} -k +3}\bigg )^2\times m $$
-
--  **Conv5 layer Computation** : $$m &times; {(m ×  k^2)−1} &times;\bigg ({{{{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\over 2} -k +3}\bigg )^2 $$
-    Now , after applying maxpooling output will be
-    $$\bigg ({{{{{{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\over 2} -k +3}\over 2}-k +3}\bigg )^2\times m $$
-
--  **Dense layer Computation** : Given dense layer has $n$ neurons, no. of computations are
-    $$\bigg(n \times \bigg ({{{{{{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\over 2} -k +3}\over 2}-k +3}\bigg )^2\times m \bigg) $$
-
--  **output layer Computation** : Given 10 classes, no. of computations are
-    $$10 \times (2 \times n +1) $$
-
-
-## Question 1: b)
-- Here input size is $$300 \times 300 \times 3$$.
-- number of classes is $10$.
-- One thing to note that Max-pooling layers have 0 parameters.
-
-
-| Layer | Inputs | Number of Parameters |
-| --- | --- |--- |
-| Conv1 | $$300 \times 300 \times 3$$| $$(3 \times k \times k+1) \times m $$|
-| Conv2 | $${(300 -k +3) \over 2 } \frac {(300 -k +3)}{ 2 }&times; m$$| $$(m \times k \times k+1) \times m$$ |
-| Conv3 | $$ (300-k+3) \times (300-k+3) \times m $$|  $$(m \times k \times k+1) \times m$$ |
-| Conv4 | $$\bigg ({{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\bigg )\times  \bigg  ({{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\bigg )\times m $$ |  $$(m \times k \times k+1) \times m$$ |
-| Conv5 |  $$\bigg ({{{{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\over 2} -k +3}\bigg )^2\times m $$|  $$(m \times k \times k+1) \times m$$  |
-| Dense layer | $$\bigg ({{{{{{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\over 2} -k +3}\over 2}-k +3}\bigg )^2\times m $$ |$$\bigg(\bigg ({{{{{{{{{{{(300 -k +3)} \over 2}  - k +3 }\over 2} -k +3}\over 2}- k +3}\over 2} -k +3}\over 2}-k +3}\bigg )^2\times m + 1 \bigg) \times n $$|
-| Output Layer | n|  $$(10 \times n \times k+ 10)  $$  |
-
-- Total number of parameters =
+## Part A:
+### To run the code:
+- **Usage** 
+```
+cs6910_dl_2_partA.py
+       [-h]
+       [-wp WANDB_PROJECT]
+       [-we WANDB_ENTITY]
+       [-e EPOCHS]
+       [-b BATCH_SIZE]
+       [-o OPTIMIZER]
+       [-lr LEARNING_RATE]
+       [-a ACTIVATION]
+       [-fm FILTER_MULTIPLIER]
+       [-dp DROPOUT]
+       [-fc DENSE_NEURONS]
+       [-nf NO_FILTERS]
+       [-bn BATCH_NORMALIZATION]
+       [-da DATA_AUGMENTATION]
+       -ks
+       KERNEL_SIZE
+       [KERNEL_SIZE ...]
+ 
+```
+ - To run code in cloab :
+    - first Load dataset using :
+     ```
+     !wget 'https://storage.googleapis.com/wandb_datasets/nature_12K.zip'
+     !unzip -q nature_12K.zip
+     ```
+     - After loading the dataset and mounting the .py file in colab run:
+      ```
+      !python3 "/content/drive/My Drive/Colab Notebooks/cs6910_dl_2_partA.py" -ks 3 3 3 3 3 ```
+- This will run code for default parameters:
+ ```config={'activation': 'LeakyRelu'
+'batch_norm': false
+'batch_size': 64
+'data_aug':true
+'dropout': 0
+'fc_neurons':128
+'filter_multiplier': 2
+'kernel_sizes':[3,3,3,3,3]
+'learning_rate': 0.0005
+'num_filters':16
+'optimizer': 'nadam'
+ ```
+ 
+ ## Part B:
+### To run the code:
+- To run code in cloab :
+    - first Load dataset using :
+     ```
+     !wget 'https://storage.googleapis.com/wandb_datasets/nature_12K.zip'
+     !unzip -q nature_12K.zip
+     ```
+     - After loading the dataset and mounting the .py file in colab run:
+      ```
+      !python3 "/content/drive/My Drive/Colab Notebooks/cs6910_dl_2_partB.py" ```
