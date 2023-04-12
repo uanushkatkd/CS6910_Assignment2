@@ -1,5 +1,6 @@
 # CS6910_Assignment2
-
+## Wandb Report Link: 
+https://wandb.ai/cs22s015/CS6910_Assignment_2_Q2/reports/CS6910-Assignment-2--Vmlldzo0MDIxMDE2
 ## Part A:
 ### To run the code:
 - **Usage** 
